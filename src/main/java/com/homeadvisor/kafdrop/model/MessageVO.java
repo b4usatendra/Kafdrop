@@ -18,72 +18,32 @@
 
 package com.homeadvisor.kafdrop.model;
 
-public class MessageVO
-{
-   private String message;
-   private String key;
-   private boolean valid;
-   private long checksum;
-   private long computedChecksum;
-   private String compressionCodec;
+public final class MessageVO {
+  private String message;
+  private String key;
+  private String headers;
 
-   public boolean isValid()
-   {
-      return valid;
-   }
+  public String getMessage() {
+    return message;
+  }
 
-   public void setValid(boolean valid)
-   {
-      this.valid = valid;
-   }
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
-   public String getMessage()
-   {
-      return message;
-   }
+  public String getKey() {
+    return key;
+  }
 
-   public void setMessage(String message)
-   {
-      this.message = message;
-   }
+  public void setKey(String key) {
+    this.key = key;
+  }
 
-   public String getKey()
-   {
-      return key;
-   }
+  public String getHeaders() {
+    return headers;
+  }
 
-   public void setKey(String key)
-   {
-      this.key = key;
-   }
-
-   public long getChecksum()
-   {
-      return checksum;
-   }
-
-   public void setChecksum(long checksum)
-   {
-      this.checksum = checksum;
-   }
-
-   public long getComputedChecksum()
-   {
-      return computedChecksum;
-   }
-
-   public void setComputedChecksum(long computedChecksum)
-   {
-      this.computedChecksum = computedChecksum;
-   }
-
-   public String getCompressionCodec()
-   {
-      return compressionCodec;
-   }
-
-   public void setCompressionCodec(String compressionCodec)
-   {
-      this.compressionCodec = compressionCodec;
-   }
+  public void setHeaders(String headers) {
+    this.headers = headers;
+  }
 }

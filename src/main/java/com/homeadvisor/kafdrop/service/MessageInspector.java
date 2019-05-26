@@ -18,28 +18,23 @@
 
 package com.homeadvisor.kafdrop.service;
 
-import com.homeadvisor.kafdrop.model.MessageVO;
-import com.homeadvisor.kafdrop.model.TopicPartitionVO;
-import com.homeadvisor.kafdrop.model.TopicVO;
-import com.homeadvisor.kafdrop.util.Version;
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.StreamSupport;
+import com.homeadvisor.kafdrop.model.*;
+import com.homeadvisor.kafdrop.util.*;
 import kafka.api.FetchRequest;
-import kafka.api.FetchRequestBuilder;
+import kafka.api.*;
 import kafka.javaapi.FetchResponse;
-import kafka.javaapi.consumer.SimpleConsumer;
+import kafka.javaapi.consumer.*;
 import kafka.javaapi.message.ByteBufferMessageSet;
-import kafka.message.Message;
-import kafka.message.MessageAndOffset;
-import org.apache.kafka.common.TopicPartition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import kafka.message.*;
+import org.apache.kafka.common.*;
+import org.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.*;
+
+import java.nio.*;
+import java.nio.charset.*;
+import java.util.*;
+import java.util.stream.*;
 
 @Service
 public class MessageInspector {
@@ -67,7 +62,7 @@ public class MessageInspector {
       return kafkaMonitor.getBroker(partition.getLeader().getId())
           .map(broker -> {
             SimpleConsumer consumer = new SimpleConsumer(broker.getHost(), broker.getPort(), 10000,
-                100000, "");
+                                                         100000, "");
 
             final FetchRequestBuilder fetchRequestBuilder = new FetchRequestBuilder()
                 .clientId("KafDrop")
@@ -113,20 +108,11 @@ public class MessageInspector {
       vo.setMessage(readString(message.payload()));
     }
 
-    vo.setValid(message.isValid());
-    vo.setCompressionCodec(message.compressionCodec().name());
-    vo.setChecksum(message.checksum());
-    vo.setComputedChecksum(message.computeChecksum());
-
     return vo;
   }
 
   private String readString(ByteBuffer buffer) {
-    try {
-      return new String(readBytes(buffer), "UTF-8");
-    } catch (UnsupportedEncodingException e) {
-      return "<unsupported encoding>";
-    }
+    return new String(readBytes(buffer), StandardCharsets.UTF_8);
   }
 
   private byte[] readBytes(ByteBuffer buffer) {
@@ -134,14 +120,6 @@ public class MessageInspector {
   }
 
   private byte[] readBytes(ByteBuffer buffer, int offset, int size) {
-    byte[] dest = new byte[size];
-    if (buffer.hasArray()) {
-      System.arraycopy(buffer.array(), buffer.arrayOffset() + offset, dest, 0, size);
-    } else {
-      buffer.mark();
-      buffer.get(dest);
-      buffer.reset();
-    }
-    return dest;
+    return ByteUtils.readBytes(buffer, offset, size);
   }
 }

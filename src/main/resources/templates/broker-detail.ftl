@@ -15,17 +15,21 @@
 -->
 <#import "lib/template.ftl" as template>
 <@template.header "Broker: ${broker.id?string}">
-<style type="text/css">
-    .bs-table.overview td { white-space: nowrap; }
+    <style type="text/css">
+        .bs-table.overview td {
+            white-space: nowrap;
+        }
 
-    td.leader-partitions { word-break: break-all; }
+        td.leader-partitions {
+            word-break: break-all;
+        }
 
-</style>
+    </style>
 </@template.header>
 
 <#setting number_format="0">
 
-<h1>Broker Id: ${broker.id}</h1>
+<h1>Broker ID: ${broker.id}</h1>
 
 <div id="topic-overview">
     <h2>Broker Overview</h2>
@@ -37,7 +41,7 @@
             <td>${broker.host}:${broker.port}</td>
         </tr>
         <tr>
-            <td><i class="fa fa-clock-o"></i> Start Time</td>
+            <td><i class="fa fa-clock-o"></i> Start time</td>
             <td>${broker.timestamp?string["yyyy-MM-dd HH:mm:ss.SSSZ"]}</td>
         </tr>
         <tr>
@@ -45,7 +49,7 @@
             <td><@template.yn broker.controller/></td>
         </tr>
         <tr>
-            <td># of Topics</td>
+            <td># of topics</td>
             <td>${topics?size}</td>
         </tr>
 
@@ -54,7 +58,7 @@
             <#assign partitionCount=partitionCount+(t.getLeaderPartitions(broker.id)?size)>
         </#list>
         <tr>
-            <td># of Partitions</td>
+            <td># of partitions</td>
             <td>${partitionCount}</td>
         </tr>
         </tbody>
@@ -70,17 +74,17 @@
             <th>Topic</th>
             <th>Total Partitions</th>
             <th>Broker Partitions</th>
-            <th>Partition Ids</th>
+            <th>Partition IDs</th>
         </tr>
         </thead>
         <tbody>
         <#list topics as t>
-              <tr>
-                  <td><a href="/topic/${t.name}">${t.name}</a></td>
-                  <td>${t.partitions?size}</td>
-                  <td>${t.getLeaderPartitions(broker.id)?size}</td>
-                  <td class="leader-partitions"><#list t.getLeaderPartitions(broker.id) as p>${p.id}<#sep>,</#list></td>
-              </tr>
+            <tr>
+                <td><a href="/topic/${t.name}">${t.name}</a></td>
+                <td>${t.partitions?size}</td>
+                <td>${t.getLeaderPartitions(broker.id)?size}</td>
+                <td class="leader-partitions"><#list t.getLeaderPartitions(broker.id) as p>${p.id}<#sep>,</#list></td>
+            </tr>
         </#list>
         </tbody>
     </table>
